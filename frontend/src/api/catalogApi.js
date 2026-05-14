@@ -5,3 +5,6 @@ export const listItems = () =>
 
 export const getItem = (id) =>
   catalogApi.get(`/api/v1/catalog/items/${id}`).then(r => r.data.data)
+
+export const createItem = (data) =>
+  catalogApi.post('/api/v1/catalog/items', data).then(r => r.data.data)
