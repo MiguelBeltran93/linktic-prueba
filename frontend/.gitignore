@@ -1,0 +1,11 @@
+.DS_Store
+.thumbs.db
+node_modules/
+dist/
+.quasar/
+/src-cordova/node_modules/
+/src-capacitor/android/
+/src-capacitor/ios/
+.env
+.env.*
+*.local
