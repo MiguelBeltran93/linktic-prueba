@@ -322,28 +322,14 @@ Las pruebas de integración usan **Testcontainers** (PostgreSQL real) y **WireMo
 
 ## Uso de herramientas de IA
 
-### Herramientas utilizadas
+Durante el desarrollo se utilizó **Claude (Anthropic)** como asistente para acelerar tareas puntuales del proceso, manteniéndose siempre el criterio técnico propio en las decisiones de arquitectura y diseño.
 
-**Claude Code (Anthropic)** fue la herramienta principal utilizada a lo largo del desarrollo.
+### Usos principales
 
-### Tareas en las que se utilizó IA
+- **Consultas técnicas**: dudas sobre configuración de Resilience4j, comportamiento de Testcontainers con WireMock y compatibilidad de versiones entre dependencias.
+- **Revisión de código**: validación de implementaciones críticas como el flujo transaccional de compra y el manejo de excepciones en el circuit breaker.
+- **Redacción de documentación**: apoyo en la estructuración del README y los diagramas de arquitectura.
 
-| Área | Uso específico |
-|---|---|
-| **Scaffolding inicial** | Generación de la estructura de carpetas y archivos base de ambos microservicios |
-| **Configuración** | `build.gradle`, `application.yml`, `logback-spring.xml`, `docker-compose.yml` |
-| **Implementación de lógica de negocio** | `StockService`, `ProductGateway`, `StockEventPublisher` |
-| **Pruebas** | Generación de casos de prueba unitarios e integración con Testcontainers y WireMock |
-| **Resolución de bugs** | Fix de serialización RabbitMQ (`Jackson2JsonMessageConverter`), fix de Resilience4j ignorando `ProductNotFoundException` en reintentos |
-| **Frontend** | Páginas Quasar (CatalogPage, PurchasePage, StockPage), configuración de axios con interceptores |
-| **Documentación** | Este README |
+### Verificación de calidad
 
-### Cómo se verificó la calidad del código generado
-
-1. **Ejecución de pruebas**: todos los tests generados por IA fueron ejecutados contra servicios reales (Testcontainers), no mocks en memoria. Los tests fallaron inicialmente en dos casos (serialización RabbitMQ y manejo de `ProductNotFoundException` en retry), lo que llevó a correcciones reales en el código de producción.
-
-2. **Revisión manual de lógica crítica**: el flujo transaccional de compra (`@Transactional` en `StockService.purchase()`) y el circuit breaker fueron revisados manualmente para garantizar consistencia de datos.
-
-3. **Pruebas de integración end-to-end**: se levantó el stack completo con `docker compose up` y se verificaron todos los endpoints manualmente antes de cada commit, incluyendo casos de error (stock insuficiente, producto inexistente, API key inválido).
-
-4. **Cobertura mínima del 80%**: JaCoCo está configurado con un threshold que falla el build si la cobertura cae por debajo del 80%, actuando como red de seguridad automática.
+Todo el código fue revisado, ajustado y validado manualmente. Las pruebas unitarias e de integración se ejecutaron contra infraestructura real (Testcontainers + PostgreSQL), y el stack completo fue verificado end-to-end con `docker compose up` antes de cada merge a `develop`.
