@@ -1,0 +1,61 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: stock-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/linktic_db
+    username: postgres
+    password: admin
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+security:
+  api-key: secret123
+
+services:
+  catalog:
+    url: http://localhost:8080
+    api-key: secret123
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      catalogGateway:
+        slidingWindowSize: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+  retry:
+    instances:
+      catalogGateway:
+        maxAttempts: 3
+        waitDuration: 500ms
+        ignoreExceptions:
+          - com.linktic.stock.exception.ProductNotFoundException
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs

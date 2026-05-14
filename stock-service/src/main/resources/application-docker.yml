@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/linktic_db
+  rabbitmq:
+    host: rabbitmq
+
+services:
+  catalog:
+    url: http://catalog-service:8080
